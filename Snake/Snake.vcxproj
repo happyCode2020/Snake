@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="menu.h" />
+    <ClInclude Include="reLink.h" />
     <ClInclude Include="Snake.h" />
   </ItemGroup>
   <ItemGroup>

@@ -19,12 +19,14 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Map.h" />
     <ClInclude Include="menu.h" />
     <ClInclude Include="reLink.h" />
     <ClInclude Include="Snake.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Map.cpp" />
     <ClCompile Include="menu.cpp" />
     <ClCompile Include="Snake.cpp" />
   </ItemGroup>

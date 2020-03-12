@@ -48,23 +48,42 @@ bool Snake::movePossible(int x, int y)
 
 bool Snake::move()
 {
-	int m[4][2] = { {0,-1} ,{0,1}, {-1,0}, {1,0} };
 	HANDLE hThread = CreateThread(NULL, 0, KeyDown, &snakeHeadDirection, 0, NULL);//创建新的线程
-	Position *snakeEnd;//暂存每次移动时蛇尾的点
+	//暂存每次移动时蛇头尾点
+	Position* snakeHead = &(theSnake.getHeadP()->data);
+	Position* snakeEnd = &(theSnake.getEndP()->data);
 
 	while (true) {
+		
+		//将蛇尾擦掉
+		menu::setCursorPosition(snakeEnd->getAbsoluteX(), snakeEnd->getY());
+		cout << "  ";
+		
+		//将蛇尾方块放到蛇头前面
+		switch (snakeHeadDirection) {
+		case Direction::UP:
+			snakeEnd->setY(snakeHead->getY() - 1);
+			snakeEnd->setX(snakeHead->getX());
+			break;
+		case Direction::DOWN:
+			snakeEnd->setY(snakeHead->getY() + 1);
+			snakeEnd->setX(snakeHead->getX());
+			break;
+		case Direction::LEFT:
+			snakeEnd->setX(snakeHead->getX() - 1);
+			snakeEnd->setY(snakeHead->getY());
+			break;
+		case Direction::RIGHT:
+			snakeEnd->setX(snakeHead->getX() + 1);
+			snakeEnd->setY(snakeHead->getY());
+		}
+
+		theSnake.moveFrontP();//蛇尾变蛇头，蛇尾前移
+		snakeHead = &(theSnake.getHeadP()->data);//更新蛇头点
 		snakeEnd = &(theSnake.getEndP()->data);//更新蛇尾点
 
-
-		//将蛇尾擦掉
-		menu::setCursorPosition(snakeEnd->getAbsoluteX, theSnake.getEndP()->data.getY());
-		cout << "  ";
-		//将蛇尾方块放到蛇头前面
-		theSnake.getEndP()->data.setX(theSnake.getHeadP()->data.getX() + m[(int)snakeHeadDirection][0]);
-		theSnake.getEndP()->data.setY(theSnake.getHeadP()->data.getY() + m[(int)snakeHeadDirection][1]);
-		theSnake.moveFrontP();//蛇尾变蛇头，蛇尾前移
-		//画出新蛇头
-		menu::setCursorPosition(theSnake.getHeadP()->data.getAbsoluteX(), theSnake.getHeadP()->data.getY());
+		//显示新蛇头位置
+		menu::setCursorPosition(snakeHead->getAbsoluteX(), snakeHead->getY());
 		cout << "■";
 		Sleep(500);
 	}

@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="menu.h" />
     <ClInclude Include="reLink.h" />

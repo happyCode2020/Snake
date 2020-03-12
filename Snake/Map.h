@@ -1,6 +1,5 @@
 #pragma once
-#include<iostream>
-#include"menu.h"
+#include"include.h"
 #define MapSizeX 40	//µØÍ¼ºá³ß´ç
 #define MapSizeY 30	//×Ý³ß´ç
 using namespace std;

@@ -1,13 +1,9 @@
 #include "menu.h"
-#define F_BLUE FOREGROUND_BLUE
-#define F_RED FOREGROUND_RED
-#define F_GREEN FOREGROUND_GREEN
-#define F_WHITE (FOREGROUND_BLUE | FOREGROUND_RED | FOREGROUND_GREEN)
-#define F_LIGHT FOREGROUND_INTENSITY //高亮 
 
 int menu::choiceNum = 0;
 bool menu::flagUP = true;
 bool menu::menuFlag = true;
+bool menu::game = true;
 void menu::show()
 {
 	for (int i = 0; i < 30;i++) {
@@ -53,7 +49,7 @@ void menu::choice()
 	switch (choiceNum) {
 	case 0:
 		//开始游戏
-		
+		startGame();
 		break;
 	case 1:
 		//双人游戏
@@ -71,9 +67,6 @@ void menu::choice()
 		//退出
 		
 		break;
-	}
-	while (true) {
-
 	}
 }
 
@@ -147,4 +140,31 @@ DWORD __stdcall menu::Fun(LPVOID lpParamter)
 		Sleep(100);
 	}*/
 	return 0;
+}
+
+void menu::setGame(bool setIt)
+{
+	game = setIt;
+}
+
+void menu::startGame()
+{
+	menu::setCursorVisible(false);
+	Map map;
+	Snake snake;
+	map.show();
+	snake.show();
+	HANDLE hThread = CreateThread(NULL, 0, KeyDown,&snake.getSnakeHeadDirection(), 0, NULL);//创建新的线程
+	while (true) {//主循环
+		if (snake.move(map)) {
+			Sleep(1000 / snake.getSpeed());
+		}
+		else
+		{
+			//游戏结束
+		}
+	}
+	if (hThread != NULL) {
+		CloseHandle(hThread);//销毁线程
+	}
 }

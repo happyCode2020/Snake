@@ -1,8 +1,5 @@
 #pragma once
-#include<cstdlib>
-#include<ctime>
-#include"reLink.h"
-#include"Map.h"
+#include"include.h"
 #define KEY_DOWN(VK_NONAME) ((GetAsyncKeyState(VK_NONAME) & 0x8000) ? 1:0) //检测是否按下VK_NONAME键
 
 DWORD __stdcall KeyDown(LPVOID snakeHeadDirection);//声明
@@ -40,19 +37,23 @@ struct SnakeHeadDirection
 	Direction snakeHeadDirection;//方向
 	Direction directionTemp;//方向缓冲量
 };
+class Map;
 class Snake
 {
 	ReLink<Position> theSnake;//蛇
 	int speed;//速度
+	int length;//长度
 	SnakeHeadDirection theDirection;
-	Map* map;
+	//蛇头尾点
+	Position* snakeHead;
+	Position* snakeEnd;
 public:
-	Snake(Map &theMap);
+	Snake();
 	void setSpeed(int speed);//设置速度
-	void setSnakeHeadDirection(Direction &t);//设置方向
+	int getSpeed();
+	SnakeHeadDirection& getSnakeHeadDirection();//获取方向
 	void show();
-	bool movePossible(int x,int y);//是否可移动
-	bool move();//移动
+	bool move(Map map);//移动
 	friend DWORD WINAPI KeyDown(LPVOID snakeHeadDirection);//转向
 };
 

@@ -22,10 +22,11 @@ Terrain Map::posType(int posH, int posW)	//返回对应位置点地形
 
 void Map::show()
 {
-	for (int i = 0; i < MapSizeY;i++) {
-		menu::setCursorPosition(0, i);
-		for (int j = 0; j < MapSizeX;j++) {
-			switch (mapGraph[j][i]) {
+	menu::setOutputColor(F_GREEN);
+	for (int i = 0; i < MapSizeX;i++) {
+		for (int j = 0; j < MapSizeY;j++) {
+			menu::setCursorPosition(i*2, j);
+			switch (mapGraph[i][j]) {
 			case Terrain::PosGround:
 				cout<<"  ";
 				break;
@@ -40,6 +41,7 @@ void Map::show()
 				break;
 			}
 		}
+		Sleep(10);
 	}
 }
 

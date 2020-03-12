@@ -3,6 +3,9 @@
 #include<ctime>
 #include"reLink.h"
 #include"Map.h"
+#define KEY_DOWN(VK_NONAME) ((GetAsyncKeyState(VK_NONAME) & 0x8000) ? 1:0) //检测是否按下VK_NONAME键
+
+DWORD __stdcall KeyDown(LPVOID snakeHeadDirection);//声明
 //特殊的点类
 class Position
 {
@@ -45,5 +48,6 @@ public:
 	void show();
 	bool movePossible(int x,int y);//是否可移动
 	bool move();//移动
+	friend DWORD WINAPI KeyDown(LPVOID snakeHeadDirection);//转向
 };
 

@@ -50,9 +50,14 @@ bool Snake::move()
 {
 	int m[4][2] = { {0,-1} ,{0,1}, {-1,0}, {1,0} };
 	HANDLE hThread = CreateThread(NULL, 0, KeyDown, &snakeHeadDirection, 0, NULL);//创建新的线程
+	Position *snakeEnd;//暂存每次移动时蛇尾的点
+
 	while (true) {
+		snakeEnd = &(theSnake.getEndP()->data);//更新蛇尾点
+
+
 		//将蛇尾擦掉
-		menu::setCursorPosition(theSnake.getEndP()->data.getAbsoluteX(), theSnake.getEndP()->data.getY());
+		menu::setCursorPosition(snakeEnd->getAbsoluteX, theSnake.getEndP()->data.getY());
 		cout << "  ";
 		//将蛇尾方块放到蛇头前面
 		theSnake.getEndP()->data.setX(theSnake.getHeadP()->data.getX() + m[(int)snakeHeadDirection][0]);

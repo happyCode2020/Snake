@@ -36,12 +36,14 @@ template<typename T>
 inline ReLink<T>::~ReLink()
 {
 	Link<T>* p;
-	while (Head!=nullptr&&Head!=End) {
+	if (Head == nullptr) return;
+	do {
 		p = Head;
 		Head = Head->next;
 		delete p;
-	}
-	delete End;
+	} while (Head != nullptr);
+
+		return;
 }
 
 template<typename T>

@@ -6,8 +6,9 @@ Snake::Snake(Map &theMap)
 	srand((unsigned int)time(0));//设置时间为随机数种子
 	Position head(rand()%30+5,rand()%20+5),t;
 	theSnake.addData(head);//蛇头加入
-	speed = 1;//速度
-	snakeHeadDirection = Direction::RIGHT;
+	speed = 2;//速度
+	theDirection.snakeHeadDirection = Direction::RIGHT;
+	theDirection.directionTemp = theDirection.snakeHeadDirection;
 	t.setY(head.getY());
 	for (int i = 0; i < 3;i++) {
 		t.setX(head.getX()+i+1);
@@ -22,7 +23,8 @@ void Snake::setSpeed(int speed)
 
 void Snake::setSnakeHeadDirection(Direction& t)
 {
-	snakeHeadDirection = t;
+	theDirection.snakeHeadDirection = t;
+	theDirection.directionTemp = theDirection.snakeHeadDirection;
 }
 
 void Snake::show()
@@ -48,7 +50,7 @@ bool Snake::movePossible(int x, int y)
 
 bool Snake::move()
 {
-	HANDLE hThread = CreateThread(NULL, 0, KeyDown, &snakeHeadDirection, 0, NULL);//创建新的线程
+	HANDLE hThread = CreateThread(NULL, 0, KeyDown, &theDirection, 0, NULL);//创建新的线程
 	//暂存每次移动时蛇头尾点
 	Position* snakeHead = &(theSnake.getHeadP()->data);
 	Position* snakeEnd = &(theSnake.getEndP()->data);
@@ -58,9 +60,9 @@ bool Snake::move()
 		//将蛇尾擦掉
 		menu::setCursorPosition(snakeEnd->getAbsoluteX(), snakeEnd->getY());
 		cout << "  ";
-		
 		//将蛇尾方块放到蛇头前面
-		switch (snakeHeadDirection) {
+		theDirection.snakeHeadDirection = theDirection.directionTemp;
+		switch (theDirection.snakeHeadDirection) {
 		case Direction::UP:
 			snakeEnd->setY(snakeHead->getY() - 1);
 			snakeEnd->setX(snakeHead->getX());
@@ -85,7 +87,7 @@ bool Snake::move()
 		//显示新蛇头位置
 		menu::setCursorPosition(snakeHead->getAbsoluteX(), snakeHead->getY());
 		cout << "■";
-		Sleep(500);
+		Sleep(1000/speed);
 	}
 	if (hThread != NULL) {
 		CloseHandle(hThread);//销毁线程
@@ -98,22 +100,30 @@ DWORD __stdcall KeyDown(LPVOID snakeHeadDirection)
 {
 	bool flag = true;
 	int i = 0;
-	Direction *direction = (Direction *)snakeHeadDirection;
+	SnakeHeadDirection*direction = (SnakeHeadDirection *)snakeHeadDirection;
 	while (true) {
-		if (KEY_DOWN('W')&&(*direction)!=Direction::DOWN) {
-			*direction = Direction::UP;
+		if (KEY_DOWN('W') && direction->snakeHeadDirection != Direction::DOWN) {
+			direction->directionTemp = Direction::UP;
+			flag = false;
 		}
-		else if (KEY_DOWN('S')&& (*direction) != Direction::UP)
+		else if (KEY_DOWN('S') && direction->snakeHeadDirection != Direction::UP)
 		{
-			*direction = Direction::DOWN;
+			direction->directionTemp = Direction::DOWN;
+			flag = false;
 		}
-		else if(KEY_DOWN('A') && (*direction) != Direction::RIGHT)
-		{ 
-			*direction = Direction::LEFT;
-		}
-		else if(KEY_DOWN('D') && (*direction) != Direction::LEFT)
+		else if (KEY_DOWN('A') && direction->snakeHeadDirection != Direction::RIGHT)
 		{
-			*direction = Direction::RIGHT;
+			direction->directionTemp = Direction::LEFT;
+			flag = false;
+		}
+		else if (KEY_DOWN('D') && direction->snakeHeadDirection != Direction::LEFT)
+		{
+			direction->directionTemp = Direction::RIGHT;
+			flag = false;
+		}
+		else if (!KEY_DOWN('W')&& !KEY_DOWN('D')&&!KEY_DOWN('S')&& !KEY_DOWN('A'))
+		{
+			flag = true;
 		}
 	}
 	return 0;

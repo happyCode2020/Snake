@@ -35,11 +35,16 @@ enum class Direction
 {
 	UP, DOWN, LEFT, RIGHT
 };
+struct SnakeHeadDirection
+{
+	Direction snakeHeadDirection;//方向
+	Direction directionTemp;//方向缓冲量
+};
 class Snake
 {
 	ReLink<Position> theSnake;//蛇
 	int speed;//速度
-	Direction snakeHeadDirection;//方向
+	SnakeHeadDirection theDirection;
 	Map* map;
 public:
 	Snake(Map &theMap);

@@ -2,9 +2,11 @@
 template<typename T>
 struct Link {
 	T data;
+	Link<T>* front;
 	Link<T>* next;
 public:
 	Link() {
+		front = nullptr;
 		next = nullptr;
 	}
 };
@@ -19,6 +21,8 @@ public:
 	T getItHead();//获取头节点
 	T getItEnd();//尾节点
 	Link<T>* getHeadP();//获取头指针
+	Link<T>* getEndP();//获取尾指针
+	void moveFrontP();//头尾指针前移
 };
 
 template<typename T>
@@ -37,6 +41,7 @@ inline ReLink<T>::~ReLink()
 		Head = Head->next;
 		delete p;
 	}
+	delete End;
 }
 
 template<typename T>
@@ -50,9 +55,11 @@ inline void ReLink<T>::addData(T data)
 	}
 	else
 	{
+		Head->front = p;
 		p->next = Head;
 		Head = p;
 	}
+	Head->front = End;
 	End->next = Head;
 }
 
@@ -72,4 +79,16 @@ template<typename T>
 inline Link<T>* ReLink<T>::getHeadP()
 {
 	return Head;
+}
+template<typename T>
+inline Link<T>* ReLink<T>::getEndP()
+{
+	return End;
+}
+
+template<typename T>
+inline void ReLink<T>::moveFrontP()
+{
+	Head = Head->front;
+	End = End->front;
 }

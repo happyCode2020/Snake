@@ -4,6 +4,15 @@
 using namespace std;
 
 void test0() {//ĞÂ¹¦ÄÜ²âÊÔ
+	menu::setCursorVisible(false);
+	Map map;
+	Snake snake(map);
+	map.show();
+	snake.show();
+	snake.move();
+	while (true) {
+
+	}
 }
 
 int main() {

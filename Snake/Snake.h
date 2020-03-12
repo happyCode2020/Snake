@@ -2,6 +2,7 @@
 #include<cstdlib>
 #include<ctime>
 #include"reLink.h"
+#include"Map.h"
 //特殊的点类
 class Position
 {
@@ -16,9 +17,10 @@ public:
 		x = xx*2;
 		y = yy;
 	}
-	void setX(int x) { this->x = x; }
+	void setX(int x) { this->x = x*2; }
 	void setY(int y) { this->y = y; }
-	int getX() { return x; }
+	int getAbsoluteX() { return x; }
+	int getX() { return x/2; }
 	int getY() { return y; }
 	void operator=(const Position &t) {
 		x = t.x;
@@ -35,9 +37,13 @@ class Snake
 	ReLink<Position> theSnake;//蛇
 	int speed;//速度
 	Direction snakeHeadDirection;//方向
+	Map* map;
 public:
-	Snake();
+	Snake(Map &theMap);
 	void setSpeed(int speed);//设置速度
 	void setSnakeHeadDirection(Direction &t);//设置方向
+	void show();
+	bool movePossible(int x,int y);//是否可移动
+	bool move();//移动
 };
 

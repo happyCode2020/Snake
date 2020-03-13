@@ -38,6 +38,7 @@ struct SnakeHeadDirection
 	Direction directionTemp;//方向缓冲量
 };
 class Map;
+enum class Terrain;
 class Snake
 {
 	ReLink<Position> theSnake;//蛇
@@ -47,13 +48,14 @@ class Snake
 	//蛇头尾点
 	Position* snakeHead;
 	Position* snakeEnd;
+	Map *map;
 public:
-	Snake();
+	Snake(Map &p);
 	void setSpeed(int speed);//设置速度
 	int getSpeed();
 	SnakeHeadDirection& getSnakeHeadDirection();//获取方向
 	void show();
-	bool move(Map map);//移动
+	Terrain move();//移动
 	friend DWORD WINAPI KeyDown(LPVOID snakeHeadDirection);//转向
 };
 

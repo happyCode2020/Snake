@@ -7,6 +7,7 @@
 #include"reLink.h"
 #include"Map.h"
 #include"Snake.h"
+#include"Apple.h"
 #define F_BLUE FOREGROUND_BLUE
 #define F_RED FOREGROUND_RED
 #define F_GREEN FOREGROUND_GREEN

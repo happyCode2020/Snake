@@ -45,3 +45,8 @@ void Map::show()
 	}
 }
 
+void Map::setMap(int x,int y, Terrain t)
+{
+	mapGraph[x][y] = t;
+}
+

@@ -37,13 +37,13 @@ inline ReLink<T>::~ReLink()
 {
 	Link<T>* p;
 	if (Head == nullptr) return;
-	do {
+	while (Head != End) {//循环链表没有空指针直接判空不行的
 		p = Head;
 		Head = Head->next;
 		delete p;
-	} while (Head != nullptr);
-
-		return;
+	}
+	delete End;//到了这里绝对不会是空的
+	return;
 }
 
 template<typename T>

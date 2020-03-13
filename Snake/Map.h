@@ -11,7 +11,6 @@ using namespace std;
 enum class Terrain {//地形枚举
 	PosGround, PosBlock, PosSnake, PosApple//(PosGround平地，PosBlock障碍物，PosSnake蛇身，PosApple食物)方便多文件访问,有些时候宏定义多文件可能会找不到定义(主要是想这么写试试)
 };
-
 class Map
 {
 	Terrain mapGraph[MapSizeX][MapSizeY] = { Terrain::PosGround };	//地图点阵
@@ -19,6 +18,7 @@ public:
 	Map();	//构造方法，调用初始化函数？
 	Terrain posType(int posH, int posW);	//返回位置点类型
 	void show();
+	void setMap(int x,int y,Terrain t);
 	//int mapEdit();	//地图编辑（包含新建、读取、编辑、存储？）
 };
 

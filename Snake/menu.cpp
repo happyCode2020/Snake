@@ -6,6 +6,8 @@ bool menu::menuFlag = true;
 bool menu::game = true;
 void menu::show()
 {
+	setCursorPosition(0, 0);
+	setOutputColor(F_WHITE);
 	for (int i = 0; i < 30;i++) {
 		if (i==0||i==29) {
 			cout << "■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■";
@@ -14,6 +16,7 @@ void menu::show()
 		{
 			cout << "\n■                                                                            ■";
 		}
+		Sleep(10);
 	}
 	setCursorPosition(36,8);
 	setOutputColor(F_BLUE | F_RED | F_LIGHT);
@@ -33,6 +36,7 @@ void menu::show()
 
 void menu::choice()
 {
+	menuFlag = true;
 	setCursorVisible(false);
 	HANDLE hThread = CreateThread(NULL, 0, Fun, NULL, 0, NULL);//创建新的线程
 	while (menuFlag){
@@ -150,21 +154,46 @@ void menu::setGame(bool setIt)
 void menu::startGame()
 {
 	menu::setCursorVisible(false);
-	Map map;
-	Snake snake;
+	Map map;//创建地图
+	Snake snake(map);//创建蛇
+	Apple *apple;//食物指针
+	apple = new Apple(map);
+	//显示
 	map.show();
-	snake.show();
+	//snake.show();//因为加入地图里了初始不需要画
+	//apple->show();
+	menu::setCursorPosition(38, 1);
+	cout << "预备!";
+	Sleep(1000);
+	menu::setCursorPosition(38, 1);
+	cout << "开始!";
+	Sleep(500);
+	menu::setCursorPosition(38, 1);
+	cout << "     ";
 	HANDLE hThread = CreateThread(NULL, 0, KeyDown,&snake.getSnakeHeadDirection(), 0, NULL);//创建新的线程
 	while (true) {//主循环
-		if (snake.move(map)) {
+		Terrain temp=snake.move();
+		if (temp==Terrain::PosGround||temp == Terrain::PosApple) {
 			Sleep(1000 / snake.getSpeed());
+			switch (temp) {
+			case Terrain::PosApple:
+				delete apple;
+				apple = new Apple(map);
+				apple->show();
+				break;
+			}
 		}
 		else
 		{
 			//游戏结束
+			cout << "gameover";
+			break;
 		}
 	}
 	if (hThread != NULL) {
 		CloseHandle(hThread);//销毁线程
 	}
+	Sleep(1000);
+	show();
+	choice();
 }

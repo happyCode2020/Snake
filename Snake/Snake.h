@@ -41,6 +41,11 @@ class Map;
 enum class Terrain;
 class Snake
 {
+	//用于初始化的常量
+	static const int IL = 4;	//InitialLength
+	static const int IS = 3;	//InitialSpeed
+	static const Direction ID = Direction::LEFT; //InitialDirection
+
 	ReLink<Position> theSnake;//蛇
 	int speed;//速度
 	int length;//长度
@@ -55,6 +60,7 @@ public:
 	int getSpeed();
 	SnakeHeadDirection& getSnakeHeadDirection();//获取方向
 	void show();
+	void printPoint(Position* pos, string str, Terrain posT);//输出一点
 	Terrain move();//移动
 	friend DWORD WINAPI KeyDown(LPVOID snakeHeadDirection);//转向
 };

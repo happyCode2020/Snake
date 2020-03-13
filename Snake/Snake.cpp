@@ -1,24 +1,42 @@
 #include "Snake.h"
 
+
 Snake::Snake(Map &p)
 {
+	//游戏地图
 	map = &p;
-	srand((unsigned int)time(0));//设置时间为随机数种子
-	int x=rand() % 30 + 5;
-	int y= rand() % 20 + 5;
-	Position head(x,y),t;
-	theSnake.addData(head);//蛇头加入
+
+	//设置时间为随机数种子
+	srand((unsigned int)time(0));
+	
+	//蛇头位置随机
+	int x = rand() % (MapSizeX - 2*IL - 2) + IL + 1;
+	int y = rand() % (MapSizeY - 2*IL - 2) + IL + 1;
+	
+	//蛇头和蛇身的辅助初始化变量
+	Position head(x,y),t;	
+
+	//.................UP....down....left...right
+	int m[4][2] = { { 0,-1} ,{0,1} ,{-1,0} ,{1,0} };
+
+	//蛇头加入
+	theSnake.addData(head);
 	map->setMap(x,y,Terrain::PosSnake);
-	speed = 3;//速度
-	length = 4;//长度
-	theDirection.snakeHeadDirection = Direction::RIGHT;
-	theDirection.directionTemp = theDirection.snakeHeadDirection;
-	t.setY(head.getY());
-	for (int i = 0; i < length-1;i++) {
-		t.setX(head.getX()+i+1);
+
+	//蛇身加入
+	for (int i = 1; i <= IL - 1; i++) {
+		t.setX(head.getX() + i* m[(int)ID][0]);
+		t.setY(head.getY() + i* m[(int)ID][1]);
 		theSnake.addData(t);
 		map->setMap(t.getX(), t.getY(), Terrain::PosSnake);
 	}
+
+	//蛇参数初始化
+	theDirection.snakeHeadDirection = ID;	//方向
+	theDirection.directionTemp = ID;	//方向缓存
+	speed = IS;//速度
+	length = IL;//长度
+
 	//蛇头尾点
 	snakeHead = &(theSnake.getHeadP()->data);
 	snakeEnd = &(theSnake.getEndP()->data);
@@ -52,9 +70,16 @@ void Snake::show()
 	std::cout <<"■";
 }
 
+void Snake::printPoint(Position* pos, string str, Terrain posT)
+{
+	menu::setCursorPosition(pos->getAbsoluteX(), pos->getY());
+	map->setMap(pos->getX(),pos->getY(), posT);
+	std::cout << str;
+}
+
 Terrain Snake::move()
 {	
-	//想了下还是这样写方便点，不然多一个函数判断碰撞
+	//想了下还是这样写方便点，不然多一个函数判断碰撞 √
 	//.................UP....down....left...right
 	int m[4][2] = { { 0,-1} ,{0,1} ,{-1,0} ,{1,0} };
 	theDirection.snakeHeadDirection = theDirection.directionTemp;//转向0
@@ -65,9 +90,7 @@ Terrain Snake::move()
 	switch(map->posType(x,y)){
 	case Terrain::PosGround:
 		//将蛇尾擦掉
-		menu::setCursorPosition(snakeEnd->getAbsoluteX(), snakeEnd->getY());
-		map->setMap(snakeEnd->getX(),snakeEnd->getY(),Terrain::PosGround);
-		std::cout << "  ";
+		printPoint(snakeEnd, "  ", Terrain::PosGround);
 		//将蛇尾方块放到蛇头前面
 		snakeEnd->setX(x);
 		snakeEnd->setY(y);
@@ -75,17 +98,13 @@ Terrain Snake::move()
 		snakeHead = &(theSnake.getHeadP()->data);//更新蛇头点
 		snakeEnd = &(theSnake.getEndP()->data);//更新蛇尾点
 		//显示新蛇头位置
-		menu::setCursorPosition(snakeHead->getAbsoluteX(), snakeHead->getY());
-		map->setMap(snakeHead->getX(), snakeHead->getY(), Terrain::PosSnake);
-		std::cout << "■";
+		printPoint(snakeHead, "■", Terrain::PosSnake);
 		return Terrain::PosGround;
 	case Terrain::PosApple:
 		theSnake.addData(t);
 		snakeHead = &(theSnake.getHeadP()->data);//更新蛇头点
 		length++;
-		menu::setCursorPosition(snakeHead->getAbsoluteX(), snakeHead->getY());
-		map->setMap(snakeHead->getX(), snakeHead->getY(), Terrain::PosSnake);
-		std::cout << "■";
+		printPoint(snakeHead, "■", Terrain::PosSnake);
 		return Terrain::PosApple;
 	case Terrain::PosBlock:
 		return Terrain::PosBlock;

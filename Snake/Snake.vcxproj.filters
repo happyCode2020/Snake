@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="music">
+      <UniqueIdentifier>{69dd1fb2-e25d-459d-9b8b-54e7f32d2cd5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="menu.h">
@@ -50,5 +53,10 @@
     <ClCompile Include="Apple.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="a.mp3">
+      <Filter>music</Filter>
+    </Media>
   </ItemGroup>
 </Project>

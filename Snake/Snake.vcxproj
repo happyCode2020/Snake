@@ -33,6 +33,9 @@
     <ClCompile Include="menu.cpp" />
     <ClCompile Include="Snake.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <Media Include="a.mp3" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <ProjectGuid>{88CFDC19-CA34-4C92-88F9-B630B7B528AF}</ProjectGuid>

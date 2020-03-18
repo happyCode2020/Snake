@@ -1,9 +1,11 @@
 #include "menu.h"
 
 int menu::choiceNum = 0;
+int menu::speed = 3;
 bool menu::flagUP = true;
 bool menu::menuFlag = true;
 bool menu::game = true;
+bool menu::music = true;
 void menu::show()
 {
 	setCursorPosition(0, 0);
@@ -21,9 +23,9 @@ void menu::show()
 	setCursorPosition(36,8);
 	setOutputColor(F_BLUE | F_RED | F_LIGHT);
 	cout << "贪吃蛇" << endl;
-	setCursorPosition(MENU_FIRST_X-1, MENU_FIRST_Y);
+	setCursorPosition(MENU_FIRST_X, MENU_FIRST_Y);
 	setOutputColor(F_WHITE);//白色
-	cout << "->开始游戏" << endl;
+	cout << "*开始游戏" << endl;
 	setCursorPosition(MENU_FIRST_X, MENU_FIRST_Y+1);
 	cout << "*双人游戏" << endl;
 	setCursorPosition(MENU_FIRST_X, MENU_FIRST_Y+2);
@@ -32,6 +34,8 @@ void menu::show()
 	cout << "*设置" << endl;
 	setCursorPosition(MENU_FIRST_X, MENU_FIRST_Y+4);
 	cout << "*退出" << endl;
+	setCursorPosition(MENU_FIRST_X - 1, MENU_FIRST_Y+ choiceNum);
+	cout << "->";
 }
 
 void menu::choice()
@@ -57,19 +61,21 @@ void menu::choice()
 		break;
 	case 1:
 		//双人游戏
-		
+		setCursorPosition(0,0);
+		cout << "未完成！";
 		break;
 	case 2:
 		//地图编辑
-		
+		setCursorPosition(0, 0);
+		cout << "未完成！";
 		break;
 	case 3:
 		//设置
-		
+		setShow();
 		break;
 	case 4:
 		//退出
-		
+		exit(0);
 		break;
 	}
 }
@@ -146,9 +152,118 @@ DWORD __stdcall menu::Fun(LPVOID lpParamter)
 	return 0;
 }
 
+DWORD __stdcall menu::setFun(LPVOID lpParamter)
+{
+	int *set=(int *)lpParamter;
+	while (true) {
+		if (KEY_DOWN('W') && (*set) !=0 && flagUP) {
+			Sleep(10);
+			setCursorPosition(33, 12 + (*set));
+			cout << " *";
+			(*set)--;
+			Sleep(10);
+			setCursorPosition(33, 12 + (*set));
+			cout << "->";
+			flagUP = false;
+		}
+		else if (KEY_DOWN('S') && (*set) != 2 && flagUP)
+		{
+			Sleep(10);
+			setCursorPosition(33, 12 + (*set));
+			cout << " *";
+			(*set)++;
+			Sleep(10);
+			setCursorPosition(33, 12 + (*set));
+			cout << "->";
+			flagUP = false;
+		}
+		else if (KEY_DOWN('J') && flagUP) {
+			setCursorPosition(35, 12 + (*set));
+			if ((*set) == 0 && music) {
+				cout << "音乐:关";
+				music = false;
+			}
+			else if ((*set) == 0 && !music) {
+				cout << "音乐:开";
+				music = true;
+			}
+			else if ((*set) == 1 && speed!=5) {
+				speed++;
+				cout << "速度:"<<speed;
+			}
+			else if ((*set) == 1 && speed == 5) {
+				speed=1;
+				cout << "速度:"<<speed;
+			}
+			else if( (*set)==2 )
+			{
+				*set = -1;
+				for (int i = 0; i < 4;i++) {
+					setCursorPosition(33, 11 + i);
+					cout << "          ";
+				}
+				return 0;
+			}
+			flagUP = false;
+		}
+		else if (!KEY_DOWN('S') && !KEY_DOWN('W')&& !KEY_DOWN('J')) {
+			flagUP = true;
+		}
+	}
+	return 0;
+}
+
 void menu::setGame(bool setIt)
 {
 	game = setIt;
+}
+
+void menu::setShow()
+{
+	int set = 0;
+	bool theMuFlag=music;
+	setCursorPosition(24, 10);
+	cout << "■■■■■■■■■■■■■■■";
+	Sleep(10);
+	setCursorPosition(24, 11);
+	cout << "■           设置           ■";
+	Sleep(10);
+	setCursorPosition(24, 12);
+	cout << "■       ->音乐:开          ■";
+	Sleep(10);
+	setCursorPosition(24, 13);
+	cout << "■        *速度:3           ■";
+	Sleep(10);
+	setCursorPosition(24, 14);
+	cout << "■        *返回             ■";
+	Sleep(10);
+	setCursorPosition(24, 15);
+	cout << "■■■■■■■■■■■■■■■";
+	Sleep(10);
+	HANDLE theThread = CreateThread(NULL, 0, setFun, &set, 0, NULL);//创建新的线程
+	while (set!=-1) {
+		setCursorPosition(33, 12+set);
+		cout << "  ";
+		if (!music&&theMuFlag) {//保证只执行一次改变
+			mciSendString("stop music", nullptr, 0, nullptr);
+			theMuFlag = music;
+		}
+		else if (music&&!theMuFlag) {
+			mciSendString("play music repeat", nullptr, 0, nullptr);
+			theMuFlag = music;
+		}
+		Sleep(500);
+		setCursorPosition(33, 12+set);
+		cout << "->";
+		Sleep(500);
+	}
+	setCursorPosition(33, 12 + set);
+	cout << "  ";
+	if (theThread != NULL) {
+		CloseHandle(theThread);//销毁线程
+	}
+	menu::show();
+	menu::choice();
 }
 
 void menu::startGame()
@@ -162,6 +277,7 @@ void menu::startGame()
 	map.show();
 	//snake.show();//因为加入地图里了初始不需要画
 	//apple->show();
+	snake.setSpeed(speed);
 	menu::setCursorPosition(38, 1);
 	cout << "预备!";
 	Sleep(1000);

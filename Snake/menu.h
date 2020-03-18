@@ -10,15 +10,19 @@ class menu
 	static bool flagUP;
 	static int choiceNum;
 	static bool game;
+	static bool music;
+	static int speed;//速度
 public:
 	static void show();//显示菜单
 	static void choice();//选择
 	static void setCursorVisible(bool visible);//光标可见性
 	static void setCursorPosition(int x,int y);//光标位置
 	static void setOutputColor(WORD color);//接下来打印的文字颜色
-	static DWORD WINAPI Fun(LPVOID lpParamter);//按键检测以及确认效果(线程函数)
 	static void setGame(bool setIt);//允许暂停
+	static void setShow();
 private:
 	static void startGame();//开始游戏
+	static DWORD WINAPI Fun(LPVOID lpParamter);//按键检测以及确认效果(线程函数)
+	static DWORD WINAPI setFun(LPVOID lpParamter);//设置(线程函数)
 };
 

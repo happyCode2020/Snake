@@ -3,6 +3,8 @@
 #include<ctime>
 #include<iostream>
 #include<Windows.h>
+#include<mmsystem.h>
+#pragma comment(lib,"WINMM.LIB")
 #include"menu.h"
 #include"reLink.h"
 #include"Map.h"

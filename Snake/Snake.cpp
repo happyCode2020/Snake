@@ -13,6 +13,7 @@ Snake::Snake(Map &p)
 	length = 4;//³¤¶È
 	theDirection.snakeHeadDirection = Direction::RIGHT;
 	theDirection.directionTemp = theDirection.snakeHeadDirection;
+	theDirection.speed = speed;
 	t.setY(head.getY());
 	for (int i = 0; i < length-1;i++) {
 		t.setX(head.getX()+i+1);
@@ -98,6 +99,7 @@ Terrain Snake::move()
 DWORD __stdcall KeyDown(LPVOID snakeHeadDirection)
 {
 	int i = 0;
+	bool flag=true;
 	SnakeHeadDirection* direction = (SnakeHeadDirection*)snakeHeadDirection;
 	while (true) {
 		if (KEY_DOWN('W') && direction->snakeHeadDirection != Direction::DOWN) {
@@ -114,6 +116,15 @@ DWORD __stdcall KeyDown(LPVOID snakeHeadDirection)
 		else if (KEY_DOWN('D') && direction->snakeHeadDirection != Direction::LEFT)
 		{
 			direction->directionTemp = Direction::RIGHT;
+		}
+		if (KEY_DOWN('J')&&flag) {
+			direction->speed *= 2;
+			flag = false;
+		}
+		else if(!KEY_DOWN('J')&&!flag)
+		{
+			direction->speed /= 2;
+			flag = true;
 		}
 	}
 	return 0;

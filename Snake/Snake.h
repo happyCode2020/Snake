@@ -36,6 +36,7 @@ struct SnakeHeadDirection
 {
 	Direction snakeHeadDirection;//方向
 	Direction directionTemp;//方向缓冲量
+	int speed;
 };
 class Map;
 enum class Terrain;

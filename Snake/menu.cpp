@@ -287,9 +287,11 @@ void menu::startGame()
 	menu::setCursorPosition(38, 1);
 	cout << "     ";
 	HANDLE hThread = CreateThread(NULL, 0, KeyDown,&snake.getSnakeHeadDirection(), 0, NULL);//创建新的线程
+	Terrain temp;
 	while (true) {//主循环
-		Terrain temp=snake.move();
+		temp=snake.move();
 		if (temp==Terrain::PosGround||temp == Terrain::PosApple) {
+			snake.setSpeed(snake.getSnakeHeadDirection().speed);
 			Sleep(1000 / snake.getSpeed());
 			switch (temp) {
 			case Terrain::PosApple:

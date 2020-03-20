@@ -62,6 +62,7 @@ Terrain Snake::move()
 	//蛇正前方的x,y
 	int x = snakeHead->getX() + m[(int)theDirection.snakeHeadDirection][0];
 	int y = snakeHead->getY() + m[(int)theDirection.snakeHeadDirection][1];
+
 	Position t(x,y);//吃食物后增加的体节
 	switch(map->posType(x,y)){
 	case Terrain::PosGround:

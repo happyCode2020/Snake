@@ -232,7 +232,7 @@ void menu::setShow()
 	cout << "■       ->音乐:开          ■";
 	Sleep(10);
 	setCursorPosition(24, 13);
-	cout << "■        *速度:3           ■";
+	cout << "■        *速度:            ■";
 	Sleep(10);
 	setCursorPosition(24, 14);
 	cout << "■        *返回             ■";
@@ -240,6 +240,8 @@ void menu::setShow()
 	setCursorPosition(24, 15);
 	cout << "■■■■■■■■■■■■■■■";
 	Sleep(10);
+	setCursorPosition(40, 13);
+	cout << speed;
 	HANDLE theThread = CreateThread(NULL, 0, setFun, &set, 0, NULL);//创建新的线程
 	while (set!=-1) {
 		setCursorPosition(33, 12+set);
@@ -278,6 +280,7 @@ void menu::startGame()
 	//snake.show();//因为加入地图里了初始不需要画
 	//apple->show();
 	snake.setSpeed(speed);
+	snake.getSnakeHeadDirection().speed = speed;
 	menu::setCursorPosition(38, 1);
 	cout << "预备!";
 	Sleep(1000);
